@@ -1,5 +1,5 @@
 import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 from src.config import BOT_TOKEN, USDT_WALLET, ADMIN_ID, CURRENCY, ACCOUNT_TYPES
 from src.database import get_balance, add_balance, deduct_balance, create_order, get_user_orders
@@ -43,6 +43,13 @@ def account_keyboard(account_id):
     return InlineKeyboardMarkup(keyboard)
 
 
+def persistent_keyboard():
+    return ReplyKeyboardMarkup(
+        [[KeyboardButton("🏠 Menu")]],
+        resize_keyboard=True
+    )
+
+
 def purchase_confirm_keyboard(account_id):
     keyboard = [
         [InlineKeyboardButton("✅ Confirm Purchase", callback_data=f"confirm_{account_id}")],
@@ -59,6 +66,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"Add funds to your wallet and purchase instantly."
     )
     await update.message.reply_text(text, parse_mode="HTML", reply_markup=main_keyboard())
+    await update.message.reply_text("👇 Click the button below to open Menu", reply_markup=persistent_keyboard())
 
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -162,6 +170,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
     if not text or text.startswith("/"):
+        return
+
+    if text == "🏠 Menu":
+        first_name = update.effective_user.first_name or "there"
+        text = f"👋 Welcome <b>{first_name}</b> to <b>Reddit Accounts Store</b>!\n\nWe offer high-quality Reddit accounts.\nAdd funds to your wallet and purchase instantly."
+        await context.bot.send_message(chat_id, text, parse_mode="HTML", reply_markup=main_keyboard())
         return
 
     state = user_states.get(user_id)
