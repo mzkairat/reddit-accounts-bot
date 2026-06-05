@@ -1,7 +1,7 @@
 import os
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-USDT_WALLET = os.getenv("USDT_WALLET")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8988470317:AAE96QAJoUN2YmCORSCbFUKsYBWkqVnTdyI")
+USDT_WALLET = os.getenv("USDT_WALLET", "TPBkTi6MJiUCr9Tshb3U3MY8Ebu1GH9hti")
 ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
 CURRENCY = "USDT"
 

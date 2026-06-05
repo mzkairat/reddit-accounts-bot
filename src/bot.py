@@ -74,7 +74,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if data == "support":
-        text = "📞 <b>Contact Support</b>\n\nFor any questions or issues, contact us directly:\n@YourSupportUsername\n\nWe usually respond within 24 hours."
+        text = "📞 <b>Contact Support</b>\n\nFor any questions or issues, contact us directly:\n@Aerbytes\n\nWe usually respond within 24 hours."
         keyboard = InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Main Menu", callback_data="back_main")]])
         await query.edit_message_text(text, parse_mode="HTML", reply_markup=keyboard)
         return
