@@ -103,7 +103,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_states[user_id] = {"step": "awaiting_amount"}
         await query.edit_message_text(
             f"💳 <b>Add Funds</b>\n\n"
-            f"Enter the amount of {CURRENCY} you want to deposit (minimum 5 {CURRENCY}):",
+            f"Enter the amount of {CURRENCY} you want to deposit (minimum 20 {CURRENCY}):",
             parse_mode="HTML"
         )
         return
@@ -188,8 +188,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if state["step"] == "awaiting_amount":
         try:
             amount = float(text)
-            if amount < 5:
-                await context.bot.send_message(chat_id, "❌ Minimum deposit is 5 USDT. Please enter a higher amount.")
+            if amount < 20:
+                await context.bot.send_message(chat_id, "❌ Minimum deposit is 20 USDT. Please enter a higher amount.")
                 return
         except ValueError:
             await context.bot.send_message(chat_id, "❌ Invalid amount. Please enter a number (e.g. 20).")
