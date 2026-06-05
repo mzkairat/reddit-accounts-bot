@@ -45,7 +45,7 @@ def account_keyboard(account_id):
 
 def persistent_keyboard():
     return ReplyKeyboardMarkup(
-        [[KeyboardButton("🏠 Menu")]],
+        [[KeyboardButton("🏠 Menu"), KeyboardButton("🔄 /start")]],
         resize_keyboard=True
     )
 
@@ -59,6 +59,8 @@ def purchase_confirm_keyboard(account_id):
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    user_states.pop(user_id, None)
     first_name = update.effective_user.first_name or "there"
     text = (
         f"👋 Welcome <b>{first_name}</b> to <b>Reddit Accounts Store</b>!\n\n"
@@ -172,7 +174,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not text or text.startswith("/"):
         return
 
-    if text == "🏠 Menu":
+    if text in ("🏠 Menu", "/start"):
+        user_states.pop(user_id, None)
         first_name = update.effective_user.first_name or "there"
         text = f"👋 Welcome <b>{first_name}</b> to <b>Reddit Accounts Store</b>!\n\nWe offer high-quality Reddit accounts.\nAdd funds to your wallet and purchase instantly."
         await context.bot.send_message(chat_id, text, parse_mode="HTML", reply_markup=main_keyboard())
