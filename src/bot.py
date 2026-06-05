@@ -293,13 +293,11 @@ async def balance_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"Your balance: {get_balance(user_id):.2f} {CURRENCY}")
 
 
-def main():
+def create_application():
     if not BOT_TOKEN:
-        print("ERROR: BOT_TOKEN environment variable is not set")
-        return
+        raise ValueError("BOT_TOKEN environment variable is not set")
     if not USDT_WALLET:
-        print("ERROR: USDT_WALLET environment variable is not set")
-        return
+        raise ValueError("USDT_WALLET environment variable is not set")
 
     app = Application.builder().token(BOT_TOKEN).build()
 
@@ -309,6 +307,11 @@ def main():
     app.add_handler(CallbackQueryHandler(button_callback))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
+    return app
+
+
+def main():
+    app = create_application()
     print("Reddit Accounts Bot is running...")
     app.run_polling()
 
